@@ -9,7 +9,7 @@ const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
 
     useEffect(() => {
         const fetchAPI = async() => {
-            setDailyData(await fetchDailyData());
+            setDailyData(await fetchDailyData() || []);
         }
 
         fetchAPI();
@@ -28,7 +28,7 @@ const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
                     },{
                         data: dailyData.map(({ deaths }) => deaths),
                         label: 'Deaths',
-                        borderColor: '#red',
+                        borderColor: 'red',
                         backgroundColor: 'rgba(255,0,0,0.5)',
                         fill: true,
                     }],
