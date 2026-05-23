@@ -1,8 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { fetchDailyData } from '../../api';
 import { Line, Bar } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+    Filler,
+} from 'chart.js';
 
 import styles from './Charts.module.css';
+
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, BarElement, Title, Tooltip, Legend, Filler);
 
 const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
     const [dailyData, setDailyData] = useState([]);
@@ -18,7 +32,7 @@ const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
     const lineChart = (
         dailyData.length ? (
             <Line
-                data = {{
+                data={{
                     labels: dailyData.map(({ date }) => date),
                     datasets: [{
                         data: dailyData.map(({ confirmed }) => confirmed),
@@ -35,6 +49,7 @@ const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
                 }}
             />) : null
     );
+
     const barChart = (
         confirmed
         ? (
@@ -48,12 +63,14 @@ const Chart = ({data: { confirmed, recovered, deaths }, country}) => {
                             'rgba(0, 255, 0, 0.5)',
                             'rgba(255, 0, 0, 0.5)',
                         ],
-                        data:[confirmed.value, recovered.value, deaths.value]
+                        data: [confirmed.value, recovered.value, deaths.value]
                     }]
                 }}
                 options={{
-                    legend: { display: false },
-                    title: { display: true, text:`Current data in ${country}` },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: `Current data in ${country}` },
+                    },
                 }}
             />
         ) : null
